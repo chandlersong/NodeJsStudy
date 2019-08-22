@@ -1,9 +1,17 @@
 const http = require('http');
+const event = require('events');
 const hello = require('./libs/helloworld');
 const port = 8080;
 
+const channel = new event.EventEmitter();
+channel.on('hello',()=>{
+    console.log("Welcome!");
+});
+
 const server = http.createServer((req, res) => {
+    console.info(req.url);
     res.end(hello.sayHello("chandler"));
+    channel.emit('hello');
 });
 
 server.listen(port, () => {
